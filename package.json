@@ -1,0 +1,31 @@
+{
+  "name": "0xygen",
+  "description": "0xygen Dapp webapp using react redux and hot reloading",
+  "author": "https://github.com/krishishah/0xygen-Relay",
+  "license": "MIT",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erikras/react-redux-universal-hot-example"
+  },
+  "homepage": "https://github.com/erikras/react-redux-universal-hot-example",
+  "keywords": [
+    "react",
+    "boilerplate",
+    "babel"
+  ],
+  "main": "bin/server.js",
+  "scripts": {
+    "start1": "enable-npm start",
+    "start1": "enable-npm start",
+    "start": "node bin/server"
+  },
+	"devDependencies": {
+		"lerna": "^2.9.0"
+	},
+	"dependencies": {
+  },
+  "engines": {
+    "node": "8.6.0"
+  }
+}

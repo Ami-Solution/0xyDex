@@ -1,0 +1,64 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+
+      - image: circleci/node:9.3
+        environment:
+          - PORT: 3000
+          - PGUSER: 'test'
+          - PGPASSWORD: 'test'
+          - PGDATABASE: 'test'
+          - PGHOST: 'localhost'
+          - PGPORT: '5432'
+    
+      - image: circleci/postgres:10.1
+        environment:
+          - POSTGRES_USER: test
+          - POSTGRES_DB: test
+          - POSTGRES_PASSWORD: test
+
+      - image: davidqhr/0x-testrpc:latest
+
+    steps:
+      - checkout
+      
+      - run:
+          name: Update NPM
+          command: |
+            npm install npm@latest
+            sudo rm -rf /usr/local/lib/node_modules/npm
+            sudo mv node_modules/npm /usr/local/lib/node_modules/npm
+            sudo chown -R 500:500 /usr/local/lib/node_modules/npm
+       
+
+      - run:
+          name: "Checking Versions"
+          command: |
+            node --version
+            npm --version
+
+      - run:
+          name: Change permissions from root to user
+          command: sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
+
+      - run:
+          name: Install Lerna
+          command: npm install --global lerna
+
+      - run:
+          name: Clear Cached Dependencies
+          command: lerna clean --yes
+          
+      - run:
+          name: Install Package Dependencies 
+          command: lerna bootstrap --stream
+
+      - run:
+          name: Build Packages
+          command: CI=false lerna run build --stream
+
+      - run:
+          name: Test Packages
+          command: lerna run test
